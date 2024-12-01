@@ -388,6 +388,9 @@ func (h *Handler) statuses(w http.ResponseWriter, r *http.Request) {
 			ch := make(chan statusResponse, 1)
 			mapUUID2Ch[deviceUUID] = ch
 			g.Go(func() error {
+				if err := app.Update(); err != nil {
+					return err
+				}
 				castApplication, castMedia, castVolume := app.Status()
 				info, err := app.Info()
 				if err != nil {
